@@ -7,8 +7,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.axreng.backend.dtos.SearchResultDTO;
+
 public class CrawlerService {
-  private final Map<String, SearchResult> searches = new ConcurrentHashMap<>();
+  private final Map<String, SearchResultDTO> searches = new ConcurrentHashMap<>();
   private final ExecutorService executor = Executors.newCachedThreadPool();
 
   public String startSearch(String keyword, URL baseUrl) {
@@ -18,4 +20,7 @@ public class CrawlerService {
     return id;
   }
 
+  public SearchResultDTO getSearchResult(String id) {
+    return searches.get(id);
+  }
 }

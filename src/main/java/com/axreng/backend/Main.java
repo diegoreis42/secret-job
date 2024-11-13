@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.axreng.backend.dtos.ErrorResponseDTO;
 import com.axreng.backend.dtos.SearchRequestDTO;
 import com.axreng.backend.dtos.SearchResponseDTO;
+import com.axreng.backend.dtos.SearchResultDTO;
 
 public class Main {
     private static final CrawlerService crawlerService = new CrawlerService();
@@ -42,7 +43,18 @@ public class Main {
             }
         });
 
-        get("/crawl/:id", (req, res) -> "GET /crawl/" + req.params("id"));
+        get("/crawl/:id", (req, res) -> {
+            String searchId = req.params(":id");
+            SearchResultDTO result = crawlerService.getSearchResult(searchId);
+
+            if (result == null) {
+                res.status(404);
+                return "Search not found";
+            }
+
+            res.type("application/json");
+            return gson.toJson(result);
+        });
     }
 
     private static URL createBaseUrl() throws IllegalArgumentException {

@@ -6,14 +6,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
+import com.axreng.backend.dtos.SearchResultDTO;
 import com.axreng.backend.enums.SearchState;
 
 public class SearchTask implements Runnable {
   private final String id;
   private final String keyword;
-  private final Map<String, SearchResult> searches;
+  private final Map<String, SearchResultDTO> searches;
 
-  public SearchTask(String id, String keyword, Map<String, SearchResult> searches) {
+  public SearchTask(String id, String keyword, Map<String, SearchResultDTO> searches) {
     this.id = id;
     this.keyword = keyword;
     this.searches = searches;
@@ -35,7 +36,7 @@ public class SearchTask implements Runnable {
   }
 
   private void crawl(String url) throws Exception {
-    SearchResult result = searches.get(id);
+    SearchResultDTO result = searches.get(id);
     HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
     conn.setRequestMethod("GET");
 
