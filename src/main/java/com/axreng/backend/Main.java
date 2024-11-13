@@ -27,6 +27,11 @@ public class Main {
             try {
                 SearchRequestDTO searchRequest = gson.fromJson(req.body(), SearchRequestDTO.class);
 
+                if (!searchRequest.isValidKeyword()) {
+                    res.status(400);
+                    return gson.toJson(new ErrorResponseDTO("Invalid keyword"));
+                }
+
                 String searchId = crawlerService.startSearch(searchRequest.keyword, baseUrl);
                 return gson.toJson(new SearchResponseDTO(searchId));
 
