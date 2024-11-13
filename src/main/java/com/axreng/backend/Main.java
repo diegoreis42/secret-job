@@ -5,6 +5,8 @@ import static spark.Spark.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.eclipse.jetty.http.HttpStatus;
+
 import com.google.gson.Gson;
 import com.axreng.backend.dtos.ErrorResponseDTO;
 import com.axreng.backend.dtos.SearchRequestDTO;
@@ -28,8 +30,13 @@ public class Main {
             try {
                 SearchRequestDTO searchRequest = gson.fromJson(req.body(), SearchRequestDTO.class);
 
+                if (searchRequest == null || searchRequest.keyword == null) {
+                    res.status(HttpStatus.BAD_REQUEST_400);
+                    return gson.toJson(new ErrorResponseDTO("Invalid request body"));
+                }
+
                 if (!searchRequest.isValidKeyword()) {
-                    res.status(400);
+                    res.status(HttpStatus.BAD_REQUEST_400);
                     return gson.toJson(new ErrorResponseDTO("Invalid keyword"));
                 }
 
@@ -38,7 +45,7 @@ public class Main {
 
             } catch (Exception e) {
 
-                res.status(400);
+                res.status(HttpStatus.BAD_REQUEST_400);
                 return gson.toJson(new ErrorResponseDTO("Invalid request"));
             }
         });
@@ -48,7 +55,7 @@ public class Main {
             SearchResultDTO result = crawlerService.getSearchResult(searchId);
 
             if (result == null) {
-                res.status(404);
+                res.status(HttpStatus.NOT_FOUND_404);
                 return "Search not found";
             }
 
@@ -61,11 +68,6 @@ public class Main {
         try {
             String baseUrl = System.getenv("BASE_URL") == null ? DEFAULT_BASE_URL
                     : System.getenv("BASE_URL");
-
-            // Default baseUrl don't need validation
-            if (baseUrl.equals(DEFAULT_BASE_URL)) {
-                return new URI(DEFAULT_BASE_URL);
-            }
 
             // Ensure baseUrl starts with http:// or https://
             if (!baseUrl.startsWith("http://") && !baseUrl.startsWith("https://")) {

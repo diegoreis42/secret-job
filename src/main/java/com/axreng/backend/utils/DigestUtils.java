@@ -14,7 +14,7 @@ public class DigestUtils {
       for (byte b : hashBytes) {
         hash.append(String.format("%02x", b));
       }
-      return hash.toString().substring(0, 8); // use the first 8 characters
+      return hash.toString();
     } catch (NoSuchAlgorithmException e) {
       throw new RuntimeException("Error generating hash", e);
     }
