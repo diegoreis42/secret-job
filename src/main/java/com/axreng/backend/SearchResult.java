@@ -3,6 +3,8 @@ package com.axreng.backend;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.axreng.backend.enums.SearchState;
+
 public class SearchResult {
   private final String id;
   private final String keyword;
@@ -12,7 +14,7 @@ public class SearchResult {
   public SearchResult(String id, String keyword) {
     this.id = id;
     this.keyword = keyword;
-    this.status = "active";
+    this.status = SearchState.ACTIVE.getState();
     this.urls = new ArrayList<>();
   }
 
@@ -20,7 +22,7 @@ public class SearchResult {
     urls.add(url);
   }
 
-  public void setStatus(String status) {
-    this.status = status;
+  public void setStatus(SearchState status) {
+    this.status = status.getState();
   }
 }
