@@ -1,6 +1,6 @@
 package com.axreng.backend.dtos;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +10,7 @@ public class SearchResultDTO {
   private final String id;
   private final String keyword;
   private String status;
-  private final List<URL> urls;
+  private final List<URI> urls;
 
   public SearchResultDTO(String id, String keyword) {
     this.id = id;
@@ -19,7 +19,7 @@ public class SearchResultDTO {
     this.urls = new ArrayList<>();
   }
 
-  public void addUrl(URL url) {
+  public void addUrl(URI url) {
     urls.add(url);
   }
 

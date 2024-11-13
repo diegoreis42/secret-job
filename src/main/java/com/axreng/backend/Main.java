@@ -2,8 +2,8 @@ package com.axreng.backend;
 
 import static spark.Spark.*;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import com.google.gson.Gson;
 import com.axreng.backend.dtos.ErrorResponseDTO;
@@ -18,7 +18,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        URL baseUrl = createBaseUrl();
+        URI baseUrl = createBaseUrl();
 
         port(4567);
 
@@ -57,14 +57,14 @@ public class Main {
         });
     }
 
-    private static URL createBaseUrl() throws IllegalArgumentException {
+    private static URI createBaseUrl() throws IllegalArgumentException {
         try {
             String baseUrl = System.getenv("BASE_URL") == null ? DEFAULT_BASE_URL
                     : System.getenv("BASE_URL");
 
             // Default baseUrl don't need validation
             if (baseUrl.equals(DEFAULT_BASE_URL)) {
-                return new URL(DEFAULT_BASE_URL);
+                return new URI(DEFAULT_BASE_URL);
             }
 
             // Ensure baseUrl starts with http:// or https://
@@ -77,9 +77,9 @@ public class Main {
                 baseUrl += "/";
             }
 
-            return new URL(baseUrl);
-        } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("BASE_URL is not a valid URL", e);
+            return new URI(baseUrl);
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("BASE_URL is not a valid URI", e);
         }
     }
 }
