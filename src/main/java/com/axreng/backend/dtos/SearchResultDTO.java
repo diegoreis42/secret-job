@@ -43,6 +43,6 @@ public class SearchResultDTO {
   }
 
   public Set<String> getUrls() {
-    return Collections.unmodifiableSet(this.urls);
+    return this.urls;
   }
 }
