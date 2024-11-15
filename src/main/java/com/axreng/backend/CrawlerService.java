@@ -12,16 +12,15 @@ import org.slf4j.LoggerFactory;
 import com.axreng.backend.dtos.SearchResultDTO;
 import com.axreng.backend.utils.DigestUtils;
 
-/**
- * Handles search requests and results.
- */
 public class CrawlerService {
   private final Map<String, SearchResultDTO> searches = new ConcurrentHashMap<>();
   private final ExecutorService executor = Executors.newCachedThreadPool();
   private final Logger logger = LoggerFactory.getLogger(CrawlerService.class);
 
+  /**
+   * Starts a new search for the given keyword.
+   */
   public String startSearch(String keyword, URI baseUrl) {
-    // Generate a unique ID based on the keyword and baseUrl
     String id = DigestUtils.generateHash(keyword + baseUrl.toString()).substring(0, 8);
 
     if (searches.containsKey(id)) {
@@ -29,7 +28,6 @@ public class CrawlerService {
       return id;
     }
 
-    // Create a new SearchResultDTO and start a search task
     SearchResultDTO result = new SearchResultDTO(id, keyword);
     searches.put(id, result);
 
@@ -37,6 +35,9 @@ public class CrawlerService {
     return id;
   }
 
+  /**
+   * Gets the search result by ID.
+   */
   public SearchResultDTO getSearchResult(String id) {
     return searches.get(id);
   }
